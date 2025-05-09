@@ -1,218 +1,9 @@
-// "use client";
-
-// import React, { useState } from "react";
-// import { IoAddCircle } from "react-icons/io5";
-// import { FaTrashAlt } from "react-icons/fa";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableRow,
-//   TableHeader,
-// } from "@/components/ui/table";
-// import {
-//   Card,
-//   CardContent,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Badge } from "@/components/ui/badge";
-
-// // Sample customer and laundry items data
-// const initialOrder = {
-//   customer: {
-//     name: "Ananya Gupta",
-//     contact: "+91 9988776655",
-//     address: "123, Maple Street, Delhi",
-//   },
-//   items: [
-//     {
-//       id: "shirt",
-//       name: "Cotton Shirt",
-//       price: 150,
-//       quantity: 1,
-//       cleaningType: "Standard Clean",
-//     },
-//     {
-//       id: "suit",
-//       name: "Business Suit",
-//       price: 300,
-//       quantity: 1,
-//       cleaningType: "Delicate Care",
-//     },
-//   ],
-//   discount: 0,
-//   paymentStatus: "Pending",
-// };
-
-// export default function BillingManagement() {
-//   const [order, setOrder] = useState(initialOrder);
-
-//   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const discount = parseFloat(e.target.value);
-//     if (isNaN(discount)) return;
-//     setOrder({ ...order, discount });
-//   };
-
-//   const handlePaymentStatusChange = () => {
-//     setOrder({
-//       ...order,
-//       paymentStatus: order.paymentStatus === "Paid" ? "Pending" : "Paid",
-//     });
-//   };
-
-//   const calculateTotal = () => {
-//     const totalAmount = order.items.reduce(
-//       (total, item) => total + item.price * item.quantity,
-//       0
-//     );
-//     return totalAmount - (order.discount || 0);
-//   };
-
-//   const generateBill = () => {
-//     const totalAmount = calculateTotal();
-//     const billData = {
-//       customer: order.customer,
-//       items: order.items,
-//       totalAmount,
-//       discount: order.discount,
-//       finalAmount: totalAmount,
-//       paymentStatus: order.paymentStatus,
-//     };
-//     // Here we can integrate a bill generation API or library if needed
-//     toast.success("Bill generated successfully!");
-//     console.log(billData); // You can add more complex logic here to print/download the bill.
-//   };
-
-//   const handleItemQuantityChange = (id: string, quantity: number) => {
-//     const updatedItems = order.items.map((item) =>
-//       item.id === id ? { ...item, quantity } : item
-//     );
-//     setOrder({ ...order, items: updatedItems });
-//   };
-
-//   const deleteItemHandler = (id: string) => {
-//     const updatedItems = order.items.filter((item) => item.id !== id);
-//     setOrder({ ...order, items: updatedItems });
-//     toast.success("Item deleted!");
-//   };
-
-//   return (
-//     <div className="container mx-auto p-6">
-//       <Card>
-//         <CardHeader>
-//           <CardTitle className="text-3xl text-center">Billing Management</CardTitle>
-//         </CardHeader>
-//         <CardContent className="space-y-6">
-//           {/* Customer Details */}
-//           <div className="grid md:grid-cols-3 gap-4">
-//             <div>
-//               <h3 className="font-medium">Customer Name:</h3>
-//               <p>{order.customer.name}</p>
-//             </div>
-//             <div>
-//               <h3 className="font-medium">Contact:</h3>
-//               <p>{order.customer.contact}</p>
-//             </div>
-//             <div>
-//               <h3 className="font-medium">Address:</h3>
-//               <p>{order.customer.address}</p>
-//             </div>
-//           </div>
-
-//           {/* Laundry Items */}
-//           <h2 className="text-xl font-semibold">Laundry Items</h2>
-//           <Table>
-//             <TableHeader>
-//               <TableRow>
-//                 <TableHead>Item Name</TableHead>
-//                 <TableHead>Cleaning Type</TableHead>
-//                 <TableHead>Price</TableHead>
-//                 <TableHead>Quantity</TableHead>
-//                 <TableHead>Total</TableHead>
-//                 <TableHead>Actions</TableHead>
-//               </TableRow>
-//             </TableHeader>
-//             <TableBody>
-//               {order.items.map((item) => (
-//                 <TableRow key={item.id}>
-//                   <TableCell>{item.name}</TableCell>
-//                   <TableCell>{item.cleaningType}</TableCell>
-//                   <TableCell>₹{item.price}</TableCell>
-//                   <TableCell>
-//                     <Input
-//                       type="number"
-//                       value={item.quantity}
-//                       onChange={(e) =>
-//                         handleItemQuantityChange(item.id, parseInt(e.target.value))
-//                       }
-//                     />
-//                   </TableCell>
-//                   <TableCell>₹{item.price * item.quantity}</TableCell>
-//                   <TableCell>
-//                     <Button
-//                       variant="destructive"
-//                       size="icon"
-//                       onClick={() => deleteItemHandler(item.id)}
-//                     >
-//                       <FaTrashAlt />
-//                     </Button>
-//                   </TableCell>
-//                 </TableRow>
-//               ))}
-//             </TableBody>
-//           </Table>
-
-//           {/* Discount */}
-//           <div className="flex justify-between items-center mt-4">
-//             <h3 className="text-lg font-semibold">Apply Discount</h3>
-//             <Input
-//               type="number"
-//               placeholder="Discount Amount"
-//               value={order.discount}
-//               onChange={handleDiscountChange}
-//             />
-//           </div>
-
-//           {/* Payment Status */}
-//           <div className="flex justify-between items-center mt-4">
-//             <h3 className="text-lg font-semibold">Payment Status</h3>
-//             <Button variant="outline" onClick={handlePaymentStatusChange}>
-//               {order.paymentStatus === "Paid" ? "Mark as Pending" : "Mark as Paid"}
-//             </Button>
-//           </div>
-
-//           {/* Total Amount */}
-//           <div className="flex justify-between mt-4">
-//             <h2 className="text-lg font-semibold">Total Amount</h2>
-//             <p className="text-xl font-semibold">
-//               ₹{calculateTotal().toFixed(2)}
-//             </p>
-//           </div>
-
-//           {/* Generate Bill */}
-//           <Button className="mt-6 w-full" onClick={generateBill}>
-//             Generate Bill
-//           </Button>
-//         </CardContent>
-//       </Card>
-//       <ToastContainer />
-//     </div>
-//   );
-// }
-
 "use client";
 
 import React, { useState } from "react";
 import { IoAddCircle, IoSearch } from "react-icons/io5";
 import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
-import { MdEdit, MdVisibility } from "react-icons/md";
+import { MdVisibility } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -241,8 +32,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
+// Define the Bill type
+type Bill = {
+  id: string;
+  customerName: string;
+  orderId: string;
+  totalAmount: number;
+  discount: number;
+  finalAmount: number;
+  paymentStatus: "Pending" | "Paid";
+  createdAt: string;
+};
+
 // Initial data
-const initialBills = [
+const initialBills: Bill[] = [
   {
     id: "bill001",
     customerName: "John Doe",
@@ -266,11 +69,10 @@ const initialBills = [
 ];
 
 export default function AdminBilling() {
-  const [bills, setBills] = useState(initialBills);
-  const [filterStatus, setFilterStatus] = useState("All");
+  const [bills, setBills] = useState<Bill[]>(initialBills);
+  const [filterStatus, setFilterStatus] = useState<"All" | "Pending" | "Paid">("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [newBill, setNewBill] = useState({
-    id: "",
+  const [newBill, setNewBill] = useState<Omit<Bill, "id">>({
     customerName: "",
     orderId: "",
     totalAmount: 0,
@@ -282,7 +84,6 @@ export default function AdminBilling() {
 
   const resetForm = () => {
     setNewBill({
-      id: "",
       customerName: "",
       orderId: "",
       totalAmount: 0,
@@ -299,21 +100,29 @@ export default function AdminBilling() {
       return;
     }
 
-    setBills([
-      { ...newBill, id: Date.now().toString(), date: new Date().toLocaleString() },
-      ...bills,
-    ]);
+    const bill: Bill = {
+      ...newBill,
+      id: Date.now().toString(),
+    };
+
+    setBills([bill, ...bills]);
     toast.success("Bill added!");
     resetForm();
   };
 
   const handlePaymentStatusChange = (billId: string) => {
-    const updatedBills = bills.map((bill) =>
-      bill.id === billId ? { ...bill, paymentStatus: bill.paymentStatus === "Paid" ? "Pending" : "Paid" } : bill
+    const updatedBills: Bill[] = bills.map((bill) =>
+      bill.id === billId
+        ? {
+            ...bill,
+            paymentStatus: bill.paymentStatus === "Paid" ? "Pending" : "Paid" as "Pending" | "Paid",
+          }
+        : bill
     );
     setBills(updatedBills);
     toast.success("Payment status updated!");
   };
+  
 
   const deleteBillHandler = (id: string) => {
     const updatedBills = bills.filter((bill) => bill.id !== id);
@@ -321,25 +130,25 @@ export default function AdminBilling() {
     toast.success("Bill deleted!");
   };
 
-  const filteredBills =
-    filterStatus === "All"
-      ? bills.filter((bill) => bill.customerName.toLowerCase().includes(searchQuery.toLowerCase()))
-      : bills.filter(
-          (bill) =>
-            bill.paymentStatus === filterStatus &&
-            bill.customerName.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+  const filteredBills = bills.filter((bill) => {
+    const matchesStatus = filterStatus === "All" || bill.paymentStatus === filterStatus;
+    const matchesSearch = bill.customerName.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-4 sm:p-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl text-center">Admin Billing Management</CardTitle>
+          <CardTitle className="text-2xl sm:text-3xl text-center">
+            Admin Billing Management
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Add New Bill Form */}
           <div>
-            <h2 className="text-xl font-semibold mb-2">Add New Bill</h2>
-            <div className="grid md:grid-cols-6 gap-4">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">Add New Bill</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <Input
                 placeholder="Customer Name"
                 value={newBill.customerName}
@@ -381,7 +190,7 @@ export default function AdminBilling() {
               <Select
                 value={newBill.paymentStatus}
                 onValueChange={(value) =>
-                  setNewBill({ ...newBill, paymentStatus: value })
+                  setNewBill({ ...newBill, paymentStatus: value as "Pending" | "Paid" })
                 }
               >
                 <SelectTrigger>
@@ -392,102 +201,99 @@ export default function AdminBilling() {
                   <SelectItem value="Paid">Paid</SelectItem>
                 </SelectContent>
               </Select>
-              <Button onClick={addBillHandler}>
+              <Button onClick={addBillHandler} className="flex items-center gap-2">
                 <IoAddCircle className="text-lg" />
                 Add Bill
               </Button>
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="flex items-center justify-between mt-4">
-            <h2 className="text-lg font-medium">Search Bills:</h2>
-            <div className="flex gap-2 items-center">
+          {/* Search and Filter */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <Input
                 placeholder="Search by customer name"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-[200px]"
+                className="w-full sm:w-[200px]"
               />
-              <Button variant="outline" className="flex gap-2">
+              <Button variant="outline" className="flex items-center gap-2">
                 <IoSearch />
                 Search
               </Button>
             </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Filter by Payment Status:</span>
+              <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as "All" | "Pending" | "Paid")}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Filter" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="Pending">Pending</SelectItem>
+                  <SelectItem value="Paid">Paid</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          {/* Filter */}
-          <div className="flex items-center justify-between mt-4">
-            <h2 className="text-lg font-medium">Filter by Payment Status:</h2>
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Filter" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Pending">Pending</SelectItem>
-                <SelectItem value="Paid">Paid</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Table */}
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Customer Name</TableHead>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Total Amount</TableHead>
-                <TableHead>Discount</TableHead>
-                <TableHead>Final Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredBills.map((bill) => (
-                <TableRow key={bill.id}>
-                  <TableCell>{bill.customerName}</TableCell>
-                  <TableCell>{bill.orderId}</TableCell>
-                  <TableCell>₹{bill.totalAmount}</TableCell>
-                  <TableCell>₹{bill.discount}</TableCell>
-                  <TableCell>₹{bill.finalAmount}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={bill.paymentStatus === "Paid" ? "default" : "outline"}
-                    >
-                      {bill.paymentStatus}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{bill.createdAt}</TableCell>
-                  <TableCell className="flex gap-2">
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      onClick={() => handlePaymentStatusChange(bill.id)}
-                    >
-                      <FaCheckCircle />
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      onClick={() => alert(`Viewing Bill #${bill.id}`)}
-                    >
-                      <MdVisibility />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => deleteBillHandler(bill.id)}
-                    >
-                      <FaTrashAlt />
-                    </Button>
-                  </TableCell>
+          {/* Bills Table */}
+          <div className="overflow-x-auto">
+            <Table className="min-w-[700px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Customer Name</TableHead>
+                  <TableHead>Order ID</TableHead>
+                  <TableHead>Total Amount</TableHead>
+                  <TableHead>Discount</TableHead>
+                  <TableHead>Final Amount</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Created At</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredBills.map((bill) => (
+                  <TableRow key={bill.id}>
+                    <TableCell>{bill.customerName}</TableCell>
+                    <TableCell>{bill.orderId}</TableCell>
+                    <TableCell>₹{bill.totalAmount}</TableCell>
+                    <TableCell>₹{bill.discount}</TableCell>
+                    <TableCell>₹{bill.finalAmount}</TableCell>
+                    <TableCell>
+                      <Badge variant={bill.paymentStatus === "Paid" ? "default" : "outline"}>
+                        {bill.paymentStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{bill.createdAt}</TableCell>
+                    <TableCell className="flex flex-col sm:flex-row gap-2">
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() => handlePaymentStatusChange(bill.id)}
+                      >
+                        <FaCheckCircle />
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() => alert(`Viewing Bill #${bill.id}`)}
+                      >
+                        <MdVisibility />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => deleteBillHandler(bill.id)}
+                      >
+                        <FaTrashAlt />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
       <ToastContainer />

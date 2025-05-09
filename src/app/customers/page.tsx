@@ -125,7 +125,7 @@ export default function CustomerManagement() {
           <CardTitle className="text-2xl sm:text-3xl text-center">Customer Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Form */}
+          {/* Add/Edit Customer Form */}
           <div>
             <h2 className="text-lg sm:text-xl font-semibold mb-2">Add/Edit Customer</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -219,7 +219,7 @@ export default function CustomerManagement() {
             <h2 className="text-lg font-medium mb-4">Order History</h2>
             {customers.map((customer) => (
               <div key={customer.id} className="mb-6">
-                <h3 className="font-semibold">{customer.name}'s Orders</h3>
+                <h3 className="font-semibold">{customer.name}&apos;s Orders</h3>
                 <div className="overflow-x-auto">
                   <Table className="min-w-[500px]">
                     <TableHeader>

@@ -109,7 +109,7 @@ const NavLink = ({
 )
 
 // --- NavUser Component (Minimal Placeholder) ---
-const NavUser = ({ user }: { user: typeof user }) => (
+const NavUser = (user:any) => (
   <div className="flex items-center gap-3 p-4 border-t">
     <img
       src={user.avatar}

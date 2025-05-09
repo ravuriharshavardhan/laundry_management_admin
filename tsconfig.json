@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/dashboard/page.jsx", "src/app/layout.ts"  ],
+, "src/app/dashboard/page.jsx", "src/app/layout.ts", "src/app/billing/page.tsx", "src/app/home/page.jsx", "src/app/settings/page.jsx", "src/components/app-sidebar.tsx"  ],
   "exclude": [
     "node_modules"
   ]
